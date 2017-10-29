@@ -5,15 +5,9 @@
 :- use_module(library(semweb/turtle)).
 :- use_module(library(uri)).
 
-%data(J) :- http_get('https://api.monarchinitiative.org/api/bioentity/NCBIGene%3A84570?fetch_objects=true&rows=100', X, [json_object(dict)]), atom_json_term(X,J,[as(json)]).
 
 tpf_endpoint('http://fragments.dbpedia.org/2016-04/en?').
 tpf_endpoint('http://data.linkeddatafragments.org/lov?').
-
-data_uri(ID, URI) :- atomic_concat('https://kba.ncats.io/statements/', ID, PreURI), atomic_concat(PreURI, '?pageSize=100', URI).
-
-:- table data/1.
-data(Dict) :- data_uri('UMLS:C0038218', URI), setup_call_cleanup(http_open(URI, In, [request_header('Accept'='application/json')]), json_read_dict(In, Dict), close(In)).
 
 :- table downloaded_triples/2.
 downloaded_triples(URI, T) :- setup_call_cleanup(http_open(URI, In, [request_header('Accept'='text/turtle')]), rdf_read_turtle(In, T, []), close(In)).
