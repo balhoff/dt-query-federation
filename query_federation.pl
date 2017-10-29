@@ -25,8 +25,6 @@ tpfuri_P(P, URI) :- atom(P), uri_query_components(QueryString, [predicate=P]), t
 tpfuri_O(O, URI) :- atom(O), uri_query_components(QueryString, [object=O]), tpf_endpoint(Endpoint), atomic_concat(Endpoint, QueryString, URI).
 tpfuri(URI) :- tpf_endpoint(URI).
 
-%triple_spec(URI) :- tpfuri_SPO(_,_,_,URI); tpfuri_SP(_, _, URI); tpfuri_SO(_, _, URI); tpfuri_PO(_, _, URI); tpfuri_S(_, URI); tpfuri_P(_, URI); tpfuri_O(_, URI); tpfuri(URI).
-
 :- discontiguous rdf/3.
 rdf(S, P, O) :- atom(S), atom(P), atom(O), tpfuri_SPO(S, P, O, URI), has_triples(URI, T), member(rdf(S, P, O), T).
 rdf(S, P, O) :- atom(S), atom(P), var(O), tpfuri_SP(S, P, URI), has_triples(URI, T), member(rdf(S, P, O), T).
