@@ -8,8 +8,9 @@
 tpf_endpoint('http://fragments.dbpedia.org/2016-04/en?').
 tpf_endpoint('http://data.linkeddatafragments.org/lov?').
 
-:- table remote_triple/2.
-remote_triple(URI, T) :- setup_call_cleanup(http_open(URI, In, [request_header('Accept'='text/turtle')]), rdf_read_turtle(In, Ts, []), close(In)), member(T,Ts).
+:- table remote_triples/2.
+remote_triples(URI, Ts) :- setup_call_cleanup(http_open(URI, In, [request_header('Accept'='text/turtle')]), rdf_read_turtle(In, Ts, []), close(In)).
+remote_triple(URI, T) :- remote_triples(URI, Ts), member(T,Ts).
 has_triple(URI, T) :- remote_triple(URI, T).
 has_triple(URI, T) :- remote_triple(URI, rdf(_, 'http://www.w3.org/ns/hydra/core#next', Other)), has_triple(Other, T).
 
