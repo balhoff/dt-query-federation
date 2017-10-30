@@ -34,3 +34,12 @@ rdf(S, P, O) :- atom(S), var(P), var(O), tpfuri_S(S, URI), has_triples(URI, T), 
 rdf(S, P, O) :- var(S), atom(P), var(O), tpfuri_P(P, URI), has_triples(URI, T), member(rdf(S, P, O), T).
 rdf(S, P, O) :- var(S), var(P), atom(O), tpfuri_O(O, URI), has_triples(URI, T), member(rdf(S, P, O), T).
 rdf(S, P, O) :- var(S), var(P), var(O), tpfuri(URI), has_triples(URI, T), member(rdf(S, P, O), T).
+
+
+% Examples
+
+movie_starring_Bill_Murray(MovieID, Title, Director) :- 
+  rdf(MovieID, 'http://dbpedia.org/ontology/starring', 'http://dbpedia.org/resource/Bill_Murray'),
+  rdf(MovieID, 'http://www.w3.org/2000/01/rdf-schema#label', Title),
+  rdf(MovieID, 'http://dbpedia.org/ontology/director', DirectorID),
+  rdf(DirectorID, 'http://www.w3.org/2000/01/rdf-schema#label', Director).
