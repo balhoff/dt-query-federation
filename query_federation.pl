@@ -12,8 +12,8 @@ tpf_endpoint('http://data.linkeddatafragments.org/lov?').
 :- table downloaded_triples/2.
 downloaded_triples(URI, T) :- setup_call_cleanup(http_open(URI, In, [request_header('Accept'='text/turtle')]), rdf_read_turtle(In, T, []), close(In)).
 has_download_uri(Triples, Other) :- member(rdf(_, 'http://www.w3.org/ns/hydra/core#next', Other), Triples).
-has_triples(Start, Triples) :- downloaded_triples(Start, Triples).
-has_triples(Start, MoreTriples) :- downloaded_triples(Start, Triples), has_download_uri(Triples, Other), has_triples(Other, MoreTriples).
+has_triples(URI, Triples) :- downloaded_triples(URI, Triples).
+has_triples(URI, MoreTriples) :- downloaded_triples(URI, Triples), has_download_uri(Triples, Other), has_triples(Other, MoreTriples).
 
 % FIXME the query parameters used for the call should be figured out from triples in the service endpoint
 tpfuri_SPO(S, P, O, URI) :- atom(S), atom(P), atom(O), uri_query_components(QueryString, [subject=S, predicate=P, object=O]), tpf_endpoint(Endpoint), atomic_concat(Endpoint, QueryString, URI).
